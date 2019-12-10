@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>导入语料</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="thang,唐卡,唐卡语料">
+    <meta name="description" content="唐卡语料系统">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="fly-panel">
+
+                <div class="fly-panel-title fly-filter">
+                    <span style="font-size: 25px">待清洗语料</span>
+                    <hr class="layui-bg-cyan">
+                </div>
+
+
+                <ul class="fly-list">
+                    <li th:each="object :${objects}">
+                        <h2><a th:text="${object.getShowContent()}">语料标题</a></h2>
+                        <div class="fly-list-info">
+                            <span th:text="|上传者:${object.getUser().getName()}|">上传者:wcq</span>
+                            <span th:text="|上传时间:${object.getDate()}|">上传时间:2019.10.12</span>
+                            <span th:text="|语料来源:${object.getSource()}|">语料来源:维基百科</span>
+                        </div>
+                            <a class="daoru" th:href="@{/leaveLoading/(id=${object.getId()},classType=${object.getClassType()},doThis=${doWhat})}">
+                                <i class="layui-icon layui-icon-add-1 " title="导入" style="font-size: 30px;color: chartreuse"></i>
+                            </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div th:insert="footer :: foot"></div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['element','form'], function(){
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

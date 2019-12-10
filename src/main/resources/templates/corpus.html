@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>语料</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="thang,唐卡,唐卡语料">
+    <meta name="description" content="唐卡语料系统">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="fly-panel">
+                <div class="fly-panel-title" th:text="|共查询到:${ResultDTOS.size()}条符合条件的语料|"></div>
+                <ul class="cor-list">
+                    <li  th:each="object :${ResultDTOS}">
+                        <p th:text="${object.getShowContent()}"></p>
+                        <!--<a class="cor-down" th:href="@{'/participle/'+${object.getId()}}"><i class="layui-icon layui-icon-util" style="font-size: 30px;" title="分词"></i></a>-->
+                        <div class="cor-list-more">
+                            <span th:text="|上传者:${object.getUser().getName()}|">上传者:wcq</span>
+                            <span th:text="|上传时间:${object.getDate()}|">上传时间:2019.10.12</span>
+                            <span th:text="|语料来源:${object.getSource()}|">语料来源:维基百科</span>
+                            <span th:text="|语料标签:${object.getTags()}|"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="footer :: foot"></div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use(['element','form'], function(){
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

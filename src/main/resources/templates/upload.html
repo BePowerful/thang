@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>上传语料</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="keywords" content="thang,唐卡,唐卡语料">
+	<meta name="description" content="唐卡语料系统">
+	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<!-- 内容区 -->
+	<div class="layui-container">
+	   <div class="layui-row layui-col-space15">
+	    	<div class="layui-col-md12">
+		   	   <div class="fly-panel" style="padding: 15px 30px 15px; background-color: #f0f8ff">
+		   	   		<h2 align="center">语料上传</h2>
+					<hr class="layui-bg-cyan">
+		   	   		<div class="layui-form layui-form-pane">
+		   	   			<div class="layui-form-item">
+					    	<label class="layui-form-label">语料标题</label>
+						    <div class="layui-input-inline">
+						      <input name="title" id="title" class="layui-input" type="text" placeholder="请输入标题" autocomplete="off">
+						    </div>
+						    <div class="layui-form-mid layui-word-aux">输入后以此标题存储，也可不输入系统会自动命名</div>
+						</div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">语料来源</label>
+                            <div class="layui-input-inline">
+                                <input name="source" id="source" class="layui-input" type="text" placeholder="输入来源" autocomplete="off">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">简洁扼要</div>
+                        </div>
+		   	   		</div>
+				   <fieldset class="layui-elem-field">
+					   <legend>请选择要上传的语料</legend>
+					   <p id="errorText"></p>
+					   <div class="layui-upload">
+						   <button class="layui-btn layui-btn-normal" id="choose">选择文件</button>
+						   <button class="layui-btn"  id="start">开始上传</button>
+					   </div>
+				   </fieldset>
+		   	   </div>
+	   		</div>
+	   </div>
+	</div>
+
+<div th:insert="footer :: foot"></div>
+
+<script th:src="@{/layui/layui.all.js}"></script>
+<script>
+    layui.use(['form','upload','element'], function(){
+        var upload = layui.upload,
+            $ = layui.jquery;
+        console.log("开始执行");
+		var uploadInst= upload.render({
+               elem:'#choose',//选择文件按钮id
+                url:'/upload',
+                method:'post',
+                auto:false,
+                accept:'file',
+                acceptMime:'file/*',
+                bindAction:'#start',//上传文件按钮id
+                before:function () {
+                    this.data={//上传前附带的数据
+                        title:$('#title').val(),
+                        source:$('#source').val()
+                    };
+                    console.log("before结束");
+                },
+                done:function (res) {//上传成功后回调
+                    console.log("done开始");
+                    if (res.code != 250){//上传成功
+                        layer.msg(res.msg,{icon:1,time:2000,shade:0.4},function() {
+                            location.href = '/upload';
+                        });
+                        return ;
+                    }else{//上传失败
+						layer.msg(res.msg,{icon:2,time:2000,shade:0.4},function() {
+							location.href = '/upload';
+						});
+						return ;
+					}
+                },
+				error: function(){
+					var errorText = $('#errorText');
+					errorText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+					errorText.find('.demo-reload').on('click', function(){
+						uploadInst.upload();
+					});
+				}
+            });
+    });
+</script>
+</body>
+</html>

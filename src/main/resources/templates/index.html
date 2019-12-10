@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>唐卡语料系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="thang,唐卡,唐卡语料">
+  <meta name="description" content="唐卡语料系统">
+  <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+    	   <div class="fly-panel" style="padding: 0 70px 15px 70px; background-color: #f0f8ff">
+    	   	<h3 style="height: 40px; line-height: 50px;font-size: 25px;"><i class="layui-icon layui-icon-note" style="font-size: 20px;"></i>系统简介</h3>
+	      	<hr class="layui-bg-cyan">
+			<blockquote class="layui-elem-quote">
+				<ul class="fly-panel-main fly-list-static">
+		          <li>
+		            <span>系统名称：唐卡语料系统</span>
+		          </li>
+		          <li>
+		            <span>系统功能：唐卡语料收集、处理和检索</span>
+		          </li>
+		          <li>
+		            <span>系统意义：为构建唐卡知识图谱，唐卡研究形成数据支持</span>
+		          </li>
+		          <li>
+		            <span>开发团队：铁军团</span>
+		          </li>
+		        </ul>
+			</blockquote>
+
+	      	<h3 style="height: 40px; line-height: 50px;font-size: 25px;"><i class="layui-icon layui-icon-note" style="font-size: 20px;"></i>网站动态</h3>
+	      	<hr class="layui-bg-cyan">
+			<blockquote class="layui-elem-quote">
+				<ul class="fly-panel-main fly-list-static">
+		          <li>
+		            <span>本网站为唐卡语料库，收录各类唐卡语料。  2019年10月10日</span>
+		          </li>
+		          <li>
+		            <span>
+		              加入某某某引擎，加快检索速度。  2019年10月9日
+		            </span>
+		          </li>
+		          <li>
+		            <span>粗语料数据清理更具智能化，清洗效率更高。 2019年10月8日</span>
+		          </li>
+		          
+		          <li>
+		            <a target="_blank">加入我们，丰富语料库。 2019年10月1日</a>
+		          </li>
+		        </ul>
+			</blockquote>
+
+			<h3 style="height: 40px; line-height: 50px;font-size: 25px;"><i class="layui-icon layui-icon-note" style="font-size: 20px;"></i>粗语料与数据清洗</h3>
+	      	<hr class="layui-bg-cyan">
+			<blockquote class="layui-elem-quote">
+				<ul class="fly-panel-main fly-list-static">
+		          <li>
+		            <span>粗语料指用户或系统爬取的未经任何加工处理的语料，为txt文本</span>
+		          </li>
+		          <li>
+		            <span>粗语料收集后通常需要进行数据清洗，使语料结构化，方便后期语料的细化</span>
+		          </li>
+		          <li>
+		            <span>细化后的语料通过分词，抽取出主体、关系等，形成细语料</span>
+		          </li>
+		          
+		          <li>
+		            <a target="_blank">数据清洗</a>
+		          </li>
+		        </ul>
+			</blockquote>
+
+			<h3 style="height: 40px; line-height: 50px;font-size: 25px;"><i class="layui-icon layui-icon-note" style="font-size: 20px;"></i>唐卡词典</h3>
+	      	<hr class="layui-bg-cyan">
+			<blockquote class="layui-elem-quote">
+				<ul class="fly-panel-main fly-list-static">
+		          <li>
+		            <span>唐卡词典主要是唐卡领域名词解释</span>
+		          </li>
+		          <li>
+		            <span>更多的唐卡</span>
+		          </li>
+		        </ul>
+			</blockquote>
+      </div>
+  </div>
+</div>
+</div>
+
+<div th:insert="footer :: foot"></div>
+ 
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+layui.use(['element','form'], function(){
+  var element = layui.element,//导航的hover效果、二级菜单等功能，需要依赖element模块
+	$= layui.jquery;
+  
+  //监听导航点击
+  //element.on('nav(demo)', function(elem){
+    //console.log(elem)
+    //layer.msg(elem.text());
+  //});
+});
+</script>
+
+<!--<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_30088308'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30088308' type='text/javascript'%3E%3C/script%3E"));</script>-->
+
+</body>
+</html>

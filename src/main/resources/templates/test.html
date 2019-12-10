@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>唐卡</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="keywords" content="thang,唐卡,唐卡语料">
+	<meta name="description" content="唐卡语料系统">
+	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<!-- 内容区 -->
+	<div class="layui-container">
+	   <div class="layui-row layui-col-space15">
+	    	<div class="layui-col-md4">
+		   	   <div class="fly-panel" style="padding: 15px 30px 15px; background-color: #f0f8ff;">
+					<div class="demo-tree demo-tree-box" id="test1"></div>
+		   	   </div>
+	   		</div>
+	   		<div class="layui-col-md8">
+	   			<div class="fly-panel" style="padding: 15px 30px 15px;">
+					<div style="margin-top:15px;margin-bottom: 15px;"align="center">
+						<span><img th:src="@{/images/唐卡.jpg}" alt="唐卡"></span>
+					</div>
+					<hr class="layui-bg-cyan">
+					<div>
+						<table border="1" width="100%">
+							<tr>
+								<td>唐卡名称</td>
+								<td>这里显示唐卡名称</td>
+								<td>唐卡题材</td>
+								<td>这里显示唐卡题材</td>
+							</tr>
+							<tr>
+								<td>唐卡主尊</td>
+								<td>此处显示唐卡主尊</td>
+								<td>唐卡类别</td>
+								<td>此处为类别</td>
+							</tr>
+							<tr>
+								<td>唐卡材质</td>
+								<td>此处为材质</td>
+								<td>创作时期</td>
+								<td>此处为创造时间</td>
+							</tr>
+							<tr>
+								<td>组织机构</td>
+								<td>这里是组织机构</td>
+								<td>创作流派</td>
+								<td>这里是创作流派</td>
+							</tr>
+							<tr>
+								<td>作者</td>
+								<td>这里为作者</td>
+								<td>图像来源</td>
+								<td>这里是图像的链接</td>
+							</tr>
+							<tr>
+								<td>图像简介</td>
+								<td>图像的简单介绍</td>
+								<td>图像链接</td>
+								<td>图像的链接</td>
+							</tr>
+						</table>
+					</div>
+		   	   </div>
+	   		</div>
+	   </div>
+	</div>
+
+<div th:insert="footer :: foot"></div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+layui.use(['tree', 'util','element'], function(){
+  var tree = layui.tree
+  ,layer = layui.layer
+  ,util = layui.util
+  ,element = layui.element
+  ,data1 = [
+  {title: '唐卡题材',id: 1
+  	,children: [
+	    {title: '圣像人物',id: 1000
+	    	,children: [
+	    		{title: '佛',id: 10001
+	    			,children:[
+	    				{title:'三世佛',id:100011
+	    					,children:[
+	    						{title:'迦叶佛',id:1000111},{title:'释迦摩尼佛',id:1000112}
+	    					]
+	    				}
+	    				,{title:'过去七佛',id:100012
+	    					,children:[
+	    						{title:'毗婆尸佛',id:1000121},{title:'尸弃佛',id:1000122}
+	    					]
+
+	    				}
+	    			]
+	    		}
+	    		,{title: '菩萨',id: 10002
+	    			,children:[
+	    				{title:'文殊菩萨',id:100021
+	    					,children:[
+	    						{title:'儒童文殊',id:1000211},{title:'五字文殊'}
+	    					]
+	    				}
+	    				,{title:'观世音菩萨',id:100022
+	    					,children:[
+	    						{title:'四臂观音',id:1000221},{title:'千手观音',id:1000222}
+	    					]
+	    				}
+	    			]
+	    		}
+	    	]
+	    }
+    ]
+  }
+  ,{title: '唐卡类别',id: 2
+    ,children: [
+    	{title: '郭唐(绘制工艺)',id: 2000
+    		,children:[
+    			{title:'刺绣唐卡',id:20001},{title:'革丝唐卡',id:20002},{title:'织锦唐卡',id:20003}
+    		]
+    	}
+    	,{title: '止唐(绘制颜色)',id: 2001
+    		,children:[
+    			{title:'玛唐',id:20011},{title:'那唐',id:20012},{title:'舍唐',id:20013}
+    		]
+    	}
+    ]
+  }
+  ,{title: '唐卡材质',id: 3
+    ,children: [
+    	{title: '绘制材质',id: 3000}
+    ]
+  }
+  ,{title:'创作时期',id:4
+  	,children:[
+  		{title:'创造年代',id:41}
+  	]
+  }
+  ,{title:'组织机构',id:5
+  	,children:[
+  		{title:'教派',id:51
+  			,children:[
+  				{title:'宁玛派',id:511}
+  				,{title:'萨迦派',id:512}
+  			]
+  		}
+  		,{title:'活佛转世系统',id:52
+  			,children:[
+  				{title:'达赖喇嘛',id:521}
+  				,{title:'班禅额尔德尼',id:522}
+  				,{title:'格玛巴活佛',id:523
+  					,children:[
+  						{title:'黑帽系',id:5231},{title:'红帽系',id:5232}
+  					]
+  				}
+  			]
+  		}
+  	]
+  }
+  ];
+   //常规用法
+  tree.render({
+    elem: '#test1' //默认是点击节点可进行收缩
+    ,data: data1
+  });
+});
+</script>
+</body>
+</html>

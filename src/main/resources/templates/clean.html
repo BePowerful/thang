@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>语料清洗</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="thang,唐卡,唐卡语料">
+    <meta name="description" content="唐卡语料系统">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<!-- 内容区 -->
+	<div class="layui-container">
+	   <div class="layui-row layui-col-space15">
+	    	<div class="layui-col-md12">
+		   	   <div class="fly-panel" style="padding: 15px 30px 15px;background-color: #f0f8ff">
+					
+					 <!--  <div class="layui-field-box"> -->
+					  	<h2 align="center">数据清洗</h2>
+					  	<hr class="layui-bg-cyan">
+					  	<div class="layui-form-pane">
+						    <div class="layui-form-item layui-form-text">
+							    <label class="layui-form-label">导入语料或输入内容</label>
+							    <div class="layui-input-block">
+							      <textarea id="IDcleanContent" class="layui-textarea" placeholder="请输入内容" name="originalContent" style="height: 200px;"th:text="${originalContent}"></textarea>
+							    </div>
+						    </div>
+						
+						    <div class="layui-form-item">
+								<input id="IDid" name="doId" type="hidden" th:value="${doID}">
+							    <div class="layui-input-block">
+							      <button class="layui-btn layui-btn-normal" id="IDloading">导入语料</button>
+							      <button class="layui-btn" id="IDstartClean">开始清洗</button>
+									<button class="layui-btn layui-btn-warm" id="IDqingkong">清空</button>
+							    </div>
+						    </div>
+
+						    <div class="layui-form-item layui-form-text">
+							    <label class="layui-form-label">处理结果</label>
+							    <div class="layui-input-block">
+							      <textarea id="IDcleaned" class="layui-textarea" placeholder="处理结果" name="other" style="height: 200px;"></textarea>
+							    </div>
+						    </div>
+
+						    <div class="layui-form-item">
+							    <div class="layui-input-block">
+							      <button class="layui-btn" id="IDuploadFile">更新系统存储</button>
+									<a class="layui-btn layui-btn-normal" id="IDdownloadClean"  th:href="@{'/clean/downloadClean/'+${doID}}">下载原始语料</a>
+									<a class="layui-btn layui-btn-normal" id="IDdownloadCleaned"  th:href="@{'/clean/downloadCleaned/'+${doID}}">下载清洗后的语料</a>
+							    </div>
+						    </div>
+
+			  			</div>
+					  <!-- </div> -->
+					
+		   	   </div>
+	   		</div>
+	   </div>
+	</div>
+
+<div th:insert="footer :: foot"></div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+layui.use(['element','form','upload'], function(){
+	var $ = layui.jquery;
+	 $('#IDdownloadClean').hide();
+	 $('#IDdownloadCleaned').hide();
+	$("#IDloading").click(function(){
+		location.href = '/loading';
+	});
+	$("#IDstartClean").click(function () {
+		console.log("开始清洗，post请求");
+		$.post('/clean',{needContent:$('#IDcleanContent').val()},function (res) {
+			console.log(res);
+			$('#IDcleaned').val(res.data);
+		});
+	});
+	$('#IDuploadFile').click(function () {
+		console.log("开始更新，post请求");
+		$.post('/clean/updateFile',{content:$('#IDcleaned').val(),IDid:$('#IDid').val()},function (res) {
+			if(res.code!=250){
+				layer.msg(res.msg,{icon:1,time:2000,shade:0.4});
+				$('#IDdownloadClean').show();
+				$('#IDdownloadCleaned').show();
+				//$('#IDdownloadFile').attr("disabled",false);
+				console.log("设置可点击");
+			}else{
+				layer.msg(res.msg,{icon:2,time:2000,shade:0.4});
+			}
+		});
+	});
+	$('#IDqingkong').click(function () {
+		console.log("清空启用")
+		$('#IDcleanContent').val("");
+	});
+});
+</script>
+</body>
+</html>
