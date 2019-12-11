@@ -130,4 +130,24 @@ public class Utils {
             }
         }
     }
+
+    /**
+     * 把字符串解析成HTML可以显示的样式
+     * @param str
+     * @return
+     */
+    public static String makeStringToHTML(String str){
+        char[] chars = str.toCharArray();
+        String document = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        for (char ch:chars){
+            if(ch == '\n'){
+                document +="<br/>";
+            }else if(ch == '\t'){
+                document +="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            }else{
+                document += String.valueOf(ch);
+            }
+        }
+        return document;
+    }
 }

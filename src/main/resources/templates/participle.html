@@ -25,16 +25,46 @@
 					<div class="layui-form-item layui-form-text">
 						<label class="layui-form-label">导入语料或输入内容</label>
 						<div class="layui-input-block">
-							<textarea id="IdParticipleContent" th:text="${participleContent}" class="layui-textarea" placeholder="请输入内容" name="other" style="height: 200px;"></textarea>
+							<textarea id="IdParticipleContent" th:text="${participleContent}"
+									  lay-verify="required" class="layui-textarea" placeholder="请输入内容" name="other" style="height: 200px;"></textarea>
 						</div>
 					</div>
 
 					<div class="layui-form-item">
-						<div class="layui-input-block">
-							<input id="IDid" name="doId" type="hidden" th:value="${doID}">
-							<button class="layui-btn layui-btn-normal" id="IdLoad">导入语料</button>
-							<button class="layui-btn "id="IdJieBa">结巴分词</button>
-							<button class="layui-btn" id="IdReset">重置内容</button>
+						<div class="layui-inline">
+							<div class="layui-input-inline" style="width: auto;">
+								<button class="layui-btn layui-btn-normal" id="IdLoad">导入语料</button>
+							</div>
+							<div class="layui-input-inline">
+								<select name="participleFunction" lay-verify="required" id="IdSelectFunc">
+									<option value="">请选择分词方法</option>
+									<option value="1">结巴分词</option>
+									<option value="2">标准分词</option>
+									<option value="3">NLP分词</option>
+									<option value="4">索引分词</option>
+									<option value="5">crf分词</option>
+									<option value="6">N最短路径分词</option>
+									<option value="7">依存句法分析</option>
+								</select>
+							</div>
+							<div class="layui-input-inline" style="width: auto;">
+								<button class="layui-btn " id="IdSure">确定</button>
+							</div>
+							<div class="layui-input-inline" style="width: auto;">
+								<button class="layui-btn " id="IdReset">重置内容</button>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block" style="margin-left: 5px;">
+							<input name="like[1]" title="结巴分词" type="checkbox">
+							<input name="like[2]" title="标准分词" type="checkbox" checked="">
+							<input name="like[3]" title="NLP分词" type="checkbox">
+							<input name="like[4]" title="索引分词" type="checkbox">
+							<input name="like[5]" title="crf分词" type="checkbox">
+							<input name="like[6]" title="N最短路径分词" type="checkbox">
+							<input name="like[7]" title="N依存句法分析" type="checkbox">
+							<button class="layui-btn">确定</button>
 						</div>
 					</div>
 
@@ -111,11 +141,12 @@
 <script>
 	layui.use(['form','element'], function(){
 		var $ = layui.jquery;
+		//导入语料
 		$('#IdLoad').click(function () {
 			location.href = '/loadingForParticiple';
 		});
-		$('#IdJieBa').click(function () {
-			$.post('/participle/jieba',{content:$('#IdParticipleContent').val()},function (res) {
+		$('#IdSure').click(function () {
+			$.post('/participle',{content:$('#IdParticipleContent').val(),funcSelect:$('#IdSelectFunc').val()},function (res) {
 				$('#IdParticipleResult').val(res.data);
 			});
 		});

@@ -18,8 +18,10 @@
                 <div class="fly-panel-title" th:text="|共查询到:${ResultDTOS.size()}条符合条件的语料|"></div>
                 <ul class="cor-list">
                     <li  th:each="object :${ResultDTOS}">
-                        <p th:text="${object.getShowContent()}"></p>
-                        <!--<a class="cor-down" th:href="@{'/participle/'+${object.getId()}}"><i class="layui-icon layui-icon-util" style="font-size: 30px;" title="分词"></i></a>-->
+                        <a th:if="${object.getClassType()} eq 'Original'" th:href="@{'/preview/'+${object.getId()}}">
+                            <p th:text="${object.getShowContent()}"></p>
+                        </a>
+                        <p th:if="${object.getClassType()} eq 'Mature'" th:text="${object.getShowContent()}"></p>
                         <div class="cor-list-more">
                             <span th:text="|上传者:${object.getUser().getName()}|">上传者:wcq</span>
                             <span th:text="|上传时间:${object.getDate()}|">上传时间:2019.10.12</span>

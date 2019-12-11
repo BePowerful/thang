@@ -84,17 +84,17 @@
             <ul class="layui-clear">
                 <li style="padding:20px 50px 5px 100px">
                     <div class="layui-form layui-form-pane"  >
-                        <div class="layui-form-item">
+                        <form method="post" action="/searchAll">
+                            <div class="layui-form-item">
                             <label class="layui-form-label">语料检索</label>
                             <div class="layui-input-inline">
-                                <select name="theme" lay-verify="" lay-search="">
+                                <select name="searchKind">
                                     <option value="">请选择检索方式</option>
-                                    <option >关键字检索</option>
-                                    <option >文件检索</option>
-                                    <option >三元组检索</option>
+                                    <option value="2">粗语料</option>
+                                    <option value="1">细语料</option>
                                 </select>
                             </div>
-                            <form method="post" action="/searchAll">
+
                                 <div class="layui-input-inline">
                                     <input id="IDsearchContent" name="searchContent" class="layui-input" type="text" placeholder="请输入" autocomplete="off" >
 
@@ -102,8 +102,8 @@
                                 <button type="submit" class="layui-btn" id="IDsearch">
                                     <i class="layui-icon layui-icon-search"></i>
                                 </button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
 
                     </div>
                 </li>

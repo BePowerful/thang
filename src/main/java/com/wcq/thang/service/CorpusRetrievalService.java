@@ -1,10 +1,13 @@
 package com.wcq.thang.service;
 
+import com.wcq.thang.bean.Utils;
+import com.wcq.thang.dto.OriginalDTO;
 import com.wcq.thang.dto.ShowRetrievalResultDTO;
 import com.wcq.thang.mapper.MatureMapper;
 import com.wcq.thang.mapper.OriginalMapper;
 import com.wcq.thang.mapper.UserMapper;
 import com.wcq.thang.model.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,24 +32,17 @@ public class CorpusRetrievalService {
     private UserMapper userMapper;
 
     /**
-     * 模糊查询全部
+     * 粗语料模糊查询
      * @param content
      * @return
      */
-    public List<ShowRetrievalResultDTO> searchAll(String content) {
-        String parameter = "%" + content + "%";
+    public List<ShowRetrievalResultDTO> searchMature(String content){
         List<ShowRetrievalResultDTO> showRetrievalResultDTOS = new ArrayList<>();
-        //首先搜索细语料
+        String parameter = "%" + content + "%";
         MatureExample matureExample = new MatureExample();
         MatureExample.Criteria matureExampleCriteria = matureExample.createCriteria();
         matureExampleCriteria.andContentLike(parameter);
         List<Mature> matures = matureMapper.selectByExample(matureExample);
-        //搜索粗语料
-        OriginalExample originalExample = new OriginalExample();
-        OriginalExample.Criteria originalExampleCriteria = originalExample.createCriteria();
-        originalExampleCriteria.andTitleLike(parameter);
-        List<Original> originals = originalMapper.selectByExample(originalExample);
-        //合并
         if (matures.size() > 0 && matures.get(0) != null) {
             for (Mature mature : matures) {
                 ShowRetrievalResultDTO dto = new ShowRetrievalResultDTO();
@@ -69,6 +65,21 @@ public class CorpusRetrievalService {
                 showRetrievalResultDTOS.add(dto);
             }
         }
+        return showRetrievalResultDTOS;
+    }
+
+    /**
+     * 模糊查询粗语料
+     * @param content
+     * @return
+     */
+    public List<ShowRetrievalResultDTO> searchOriginal(String content){
+        String parameter = "%" + content + "%";
+        List<ShowRetrievalResultDTO> showRetrievalResultDTOS = new ArrayList<>();
+        OriginalExample originalExample = new OriginalExample();
+        OriginalExample.Criteria originalExampleCriteria = originalExample.createCriteria();
+        originalExampleCriteria.andTitleLike(parameter);
+        List<Original> originals = originalMapper.selectByExample(originalExample);
         if (originals.size() > 0 && originals.get(0) != null) {
             for (Original original : originals) {
                 ShowRetrievalResultDTO dto = new ShowRetrievalResultDTO();
@@ -92,5 +103,36 @@ public class CorpusRetrievalService {
             }
         }
         return showRetrievalResultDTOS;
+    }
+    /**
+     * 模糊查询全部
+     * @param content
+     * @return
+     */
+    public List<ShowRetrievalResultDTO> searchAll(String content) {
+        String parameter = "%" + content + "%";
+        List<ShowRetrievalResultDTO> showRetrievalResultDTOS = new ArrayList<>();
+        //首先搜索细语料
+        showRetrievalResultDTOS = searchMature(parameter);
+        //搜索粗语料,合并
+        showRetrievalResultDTOS.addAll(searchOriginal(content));
+        return showRetrievalResultDTOS;
+    }
+
+    /**
+     * 查询粗语料显示在预览页面
+     * @param id
+     * @return
+     */
+    public String getOriginalDTOByIdForPreview(Integer id){
+        //根据id查询到原始语料
+        Original original = originalMapper.selectByPrimaryKey(id);
+        //清洗过就显示清洗后的
+        if(original.getCleaned()){
+            return Utils.makeStringToHTML(Utils.readTxtFile(original.getCleanedPath()));
+        }else{//否则就显示转换过格式的
+            return Utils.makeStringToHTML(Utils.readTxtFile(original.getTxtPath()));
+        }
+
     }
 }

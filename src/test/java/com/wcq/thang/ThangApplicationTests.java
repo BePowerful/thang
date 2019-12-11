@@ -32,19 +32,19 @@ class ThangApplicationTests {
     void contextLoads() {
         //firstDemo();
         //标准分词
-       // biaoZhunFenCi();
-        //NLP分词
+//        biaoZhunFenCi();
+//        NLP分词
 //         NLP();
 //         //索引分词
 //        syfc();
         //急速词典分词
-//        jscdfc();
+//        jscdfc();不用
 //        //crf分词
 //        crf();
 //        // N-最短路径分词
-//        nzuiduan();
+        nzuiduan();
 //        //用户自定义词典
-//        yhzdycd();
+//        yhzdycd();不用
 //        //中国人名识别
 //        renMingshibie();
 //        //音译名识别
@@ -52,42 +52,44 @@ class ThangApplicationTests {
 //        //日本名识别
 //        renbenrenshibie();
 //        //地名识别
-        dimingshibie();
+//        dimingshibie();
 //        //机构名识别
-        jigoumi();
+//        jigoumi();
 //        //关键词提取
-        guanjiancitiq();
+//        guanjiancitiq();
 //        //自动摘要
-        zidongzaiyao();
+//        zidongzaiyao();
 //        // 短语提取
-        duanyvtiqu();
+//        duanyvtiqu();
 //        //拼音转换
-        pinyinzhuanhuan();
+//        pinyinzhuanhuan();
 //        //简繁转换
-        jianfanzhuanhuan();
+//        jianfanzhuanhuan();
 //        //文本推荐
-        wenbentuijian();
+//        wenbentuijian();
 //        yvyvjilv();
 //        //依存句法分析
-//        yicunjufafenxi();
+        yicunjufafenxi();
     }
 
     private void yicunjufafenxi() {
         System.out.println("依存句法分析");
         CoNLLSentence sentence = HanLP.parseDependency("徐先生还具体帮助他确定了把画雄鹰、松鼠和麻雀作为主攻目标。");
-        System.out.println(sentence);
+//        System.out.println(sentence);
         // 可以方便地遍历它
         for (CoNLLWord word : sentence)
         {
             System.out.printf("%s --(%s)--> %s\n", word.LEMMA, word.DEPREL, word.HEAD.LEMMA);
         }
         // 也可以直接拿到数组，任意顺序或逆序遍历
+        System.out.println("第一个for循环借宿");
         CoNLLWord[] wordArray = sentence.getWordArray();
         for (int i = wordArray.length - 1; i >= 0; i--)
         {
             CoNLLWord word = wordArray[i];
             System.out.printf("%s --(%s)--> %s\n", word.LEMMA, word.DEPREL, word.HEAD.LEMMA);
         }
+        System.out.println("第二个for循环借宿");
         // 还可以直接遍历子树，从某棵子树的某个节点一路遍历到虚根
         CoNLLWord head = wordArray[12];
         while ((head = head.HEAD) != null)
@@ -256,7 +258,7 @@ class ThangApplicationTests {
     private void guanjiancitiq() {
         System.out.println("关键词提取");
         String content = "程序员(英文Programmer)是从事程序开发、维护的专业人员。一般将程序员分为程序设计人员和程序编码人员，但两者的界限并不非常清楚，特别是在中国。软件从业人员分为初级程序员、高级程序员、系统分析员和项目经理四大类。";
-        List<String> keywordList = HanLP.extractKeyword(content, 5);
+        List<String> keywordList = HanLP.extractKeyword(content, 3);
         System.out.println(keywordList);
     }
 

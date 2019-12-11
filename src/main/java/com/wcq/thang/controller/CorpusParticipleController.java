@@ -34,9 +34,11 @@ public class CorpusParticipleController {
     }
 
     //加载语料内容的controller在CommonController中
-    @PostMapping("/participle/jieba")
-    public Result jieBa(@RequestParam(name = "content")String content){
-        return participleService.jieBa(content);
+    @PostMapping("/participle")
+    public Result participleMain(
+            @RequestParam(name = "content")String content,
+            @RequestParam(name = "funcSelect") Integer funcSelect){
+        return participleService.participleMain(content,funcSelect);
     }
 
 }

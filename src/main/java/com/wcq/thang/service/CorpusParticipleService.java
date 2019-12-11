@@ -1,7 +1,6 @@
 package com.wcq.thang.service;
 
-import com.huaban.analysis.jieba.JiebaSegmenter;
-import com.huaban.analysis.jieba.WordDictionary;
+import com.wcq.thang.bean.ParticipleUtil;
 import com.wcq.thang.bean.Result;
 import com.wcq.thang.bean.Utils;
 import com.wcq.thang.config.Constant;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,36 +110,27 @@ public class CorpusParticipleService {
     }
 
     /**
-     * 结巴分词
+     * 分词入口
      * @param content
+     * @param funcSelect
      * @return
      */
-    public Result jieBa(String content){
-        JiebaSegmenter jiebaSegmenter = new JiebaSegmenter();
-        WordDictionary.getInstance().init(Paths.get("conf"));
-        List<String> strings = jiebaSegmenter.sentenceProcess(content);
-        StringBuilder data = new StringBuilder();
-        // 简单处理示例
-        for (int i = 0; i < strings.size(); i++) {
-            if (strings.get(i).equals("，") ||
-                    strings.get(i).equals("。") ||
-                    strings.get(i).equals("、") ||
-                    strings.get(i).equals("：") ||
-                    strings.get(i).equals("？")) {
-                continue;
-            }
-            data.append(strings.get(i)).append("/");
-        }
-        //Search模式，用于对用户查询词分词
-        //Index模式，用于对索引文档分词
-        //List<SegToken> process = jiebaSegmenter.process(content, JiebaSegmenter.SegMode.SEARCH);
-        //String data = process.toString();
+    public Result participleMain(String content, Integer funcSelect) {
         Result result = new Result();
-        result.setCode(Constant.DO_SUCCESS);
+        ParticipleUtil participleUtil = new ParticipleUtil();
+        System.out.println("*************"+funcSelect);
+        switch (funcSelect){
+            case 1:result.setData(participleUtil.jieBa(content));break;
+            case 2:result.setData(participleUtil.standard(content));break;
+            case 3:result.setData(participleUtil.NLP(content));break;
+            case 4:result.setData(participleUtil.indexPar(content));break;
+            case 5:result.setData(participleUtil.crf(content));break;
+            case 6:result.setData(participleUtil.NShort(content));break;
+            case 7:result.setData(participleUtil.analysis(content));break;
+            default:System.out.println("选择分词方法时出错！");break;
+        }
         result.setMsg("分词成功!");
-        result.setData(data);
+        result.setCode(Constant.DO_SUCCESS);
         return result;
     }
-
-
 }
