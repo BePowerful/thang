@@ -1,5 +1,6 @@
 package com.wcq.thang.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wcq.thang.bean.Result;
 import com.wcq.thang.config.Constant;
 import com.wcq.thang.service.CommonService;
@@ -32,7 +33,7 @@ public class CorpusCleanController {
      *
      * @return
      */
-    @GetMapping("/loading")
+    @GetMapping("/loadingForClean")
     public ModelAndView formCleanToLoading() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("doWhat","clean");
@@ -42,33 +43,99 @@ public class CorpusCleanController {
     }
     //导入语料内容在CommonController中
 
+//    /**
+//     * * 在clean页面点击清洗后执行
+//     *      * 携带清洗的内容
+//     *      * 返回Result对象，清洗后的语料存放在result.data中
+//     * @param content
+//     * @param obj
+//     * @return
+//     */
+//    @PostMapping("/clean")
+//    public Result clean(
+//            /*@RequestBody String param*/
+//            @RequestParam(name = "param")String content,
+//            @RequestParam(name = "paramt") String  obj){
+////        JSONObject jsonObject = new JSONObject();
+////        JSONArray objects = JSONArray.parseArray(param);
+//
+////        return cleanService.cleanOriginalOrOtherInput(content,ftj,"yes");
+//        return new Result();
+//    }
     /**
      * 在clean页面点击清洗后执行
-     * 携带清洗的内容
+     * 携带清洗的内容和清洗语料的id
      * 返回Result对象，清洗后的语料存放在result.data中
-     * @param content
+     * @param object
      * @return
      */
     @PostMapping("/clean")
-    public Result clean(
-            @RequestParam(name = "needContent")String content){
-        return cleanService.cleanOriginalOrOtherInput(content);
+    public Result clean(@RequestBody JSONObject object){
+        String ftj = object.getString("ftj");
+        String math = object.getString("math");
+        String content = object.getString("originalContent");
+        Integer doId = object.getInteger("doId");
+        if(ftj==null){
+            ftj="off";
+        }
+        if(math==null){
+            math = "off";
+        }
+        if(doId == null){
+            doId = -1;
+        }
+        return cleanService.cleanOriginalOrOtherInput(content,ftj,math,doId);
     }
+    /*
+    @PostMapping("/tryLayui")
+    public Result tryLayui2(
+            //这其中如果有一个为空就会400
+            //所以采用RequestBody
+            @RequestParam(name = "originalContent")String con,
+            @RequestParam(name="ftj") String ftj,
+            @RequestParam(name="math") String math
+    ){
+        if(ftj == null)
+            ftj="null";
+        if(math == null)
+            math ="null";
+        System.out.println(ftj);
+        System.out.println(math);
+        System.out.println(con);
+
+        Result result = new Result();
+        result.setCode(200);
+        result.setMsg("ok");
+        return result;
+    }*/
+//    @PostMapping("/tryLayui")
+//    public Result tryLayui(@RequestBody JSONObject object){
+//        String ftj = object.getString("ftj");
+//        String math = object.getString("math");
+//        String con = object.getString("originalContent");
+//        if(ftj == null)
+//            ftj="null";
+//        if(math == null)
+//            math ="null";
+//        System.out.println(ftj);
+//        System.out.println(math);
+//        System.out.println(con);
+//
+//        Result result = new Result();
+//        result.setCode(200);
+//        result.setMsg("ok了");
+//        return result;
+//    }
 
     /**
      * 在清洗页面点击更新系统存储后执行，
      * 它传入原始语料的id和清洗后的内容
      * 结果就是将清洗结果写入cleanedPath.txt中
-     * @param content
-     * @param id
      * @return
      */
-    @PostMapping("/clean/updateFile")
-    public Result uploadFile(
-            @RequestParam(name="content")String content,
-            @RequestParam(name = "IDid") Integer id
-    ){
-        return cleanService.updateOriginalCaseCleaned(content,id);
+    @GetMapping("/clean/updateFile")
+    public Result saveCleanResult(){
+        return cleanService.seaveCleanResult();
     }
 
     /**

@@ -178,4 +178,13 @@ public class ParticipleUtil {
         }
         return res;
     }
+
+    /**
+     * 繁体转为简体
+     * @param content
+     * @return
+     */
+    public static String ftoJ(String content){
+        return HanLP.convertToSimplifiedChinese(content);
+    }
 }

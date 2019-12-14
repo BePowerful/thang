@@ -11,92 +11,113 @@
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
-<!-- 内容区 -->
-	<div class="layui-container">
-	   <div class="layui-row layui-col-space15">
-	    	<div class="layui-col-md12">
-		   	   <div class="fly-panel" style="padding: 15px 30px 15px;background-color: #f0f8ff">
-					
-					 <!--  <div class="layui-field-box"> -->
-					  	<h2 align="center">数据清洗</h2>
-					  	<hr class="layui-bg-cyan">
-					  	<div class="layui-form-pane">
-						    <div class="layui-form-item layui-form-text">
-							    <label class="layui-form-label">导入语料或输入内容</label>
-							    <div class="layui-input-block">
-							      <textarea id="IDcleanContent" class="layui-textarea" placeholder="请输入内容" name="originalContent" style="height: 200px;"th:text="${originalContent}"></textarea>
-							    </div>
-						    </div>
-						
-						    <div class="layui-form-item">
-								<input id="IDid" name="doId" type="hidden" th:value="${doID}">
-							    <div class="layui-input-block">
-							      <button class="layui-btn layui-btn-normal" id="IDloading">导入语料</button>
-							      <button class="layui-btn" id="IDstartClean">开始清洗</button>
-									<button class="layui-btn layui-btn-warm" id="IDqingkong">清空</button>
-							    </div>
-						    </div>
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="fly-panel" style="padding: 15px 30px 15px;background-color: #f0f8ff">
+                <h2 align="center">数据清洗</h2>
+                <hr class="layui-bg-cyan">
 
-						    <div class="layui-form-item layui-form-text">
-							    <label class="layui-form-label">处理结果</label>
-							    <div class="layui-input-block">
-							      <textarea id="IDcleaned" class="layui-textarea" placeholder="处理结果" name="other" style="height: 200px;"></textarea>
-							    </div>
-						    </div>
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">导入语料或输入内容</label>
+                        <div class="layui-input-block">
+                                <textarea id="IdCleanContent" class="layui-textarea" lay-verify="required"
+                                          placeholder="请输入内容"
+                                          name="originalContent" style="height: 200px;"
+                                          th:text="${originalContent}"></textarea>
+                        </div>
+                    </div>
 
-						    <div class="layui-form-item">
-							    <div class="layui-input-block">
-							      <button class="layui-btn" id="IDuploadFile">更新系统存储</button>
-									<a class="layui-btn layui-btn-normal" id="IDdownloadClean"  th:href="@{'/clean/downloadClean/'+${doID}}">下载原始语料</a>
-									<a class="layui-btn layui-btn-normal" id="IDdownloadCleaned"  th:href="@{'/clean/downloadCleaned/'+${doID}}">下载清洗后的语料</a>
-							    </div>
-						    </div>
 
-			  			</div>
-					  <!-- </div> -->
-					
-		   	   </div>
-	   		</div>
-	   </div>
-	</div>
+                    <div class="layui-form-item">
+                        <input id="IdDoId" name="doId" type="hidden" th:value="${doID}">
+                        <div class="layui-input-block">
+                            <a class="layui-btn" th:href="@{/loadingForClean}">导入语料</a>
+                            <input name="ftj" title="转简体" type="checkbox" lay-skin="primary">
+                            <input name="math" title="剔除简单数学运算符" type="checkbox" checked="" lay-skin="primary">
+                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="startClean">开始清洗</button>
+                            <button class="layui-btn layui-btn-warm" id="IdQinKong" type="button">清空</button>
+                        </div>
+                    </div>
+                </form>
+
+                <form class="layui-form layui-form-pane" action="" lay-filter="example">
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">处理结果</label>
+                        <div class="layui-input-block">
+                            <textarea id="IdCleanResult" class="layui-textarea" placeholder="处理结果" name="cleanResult"
+                                style="height: 200px;"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn layui-btn-normal" id="IdUpdateFile" th:if="${doID}!= null"
+                                    type="button">更新系统存储
+                            </button>
+                            <a class="layui-btn layui-btn-normal" id="IdDownloadClean"
+                               th:href="@{'/clean/downloadClean/'+${doID}}">下载原始语料</a>
+                            <a class="layui-btn layui-btn-normal" id="IdDownloadCleaned"
+                               th:href="@{'/clean/downloadCleaned/'+${doID}}">下载清洗后的语料</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:insert="footer :: foot"></div>
 
 <script th:src="@{/layui/layui.js}"></script>
 <script>
-layui.use(['element','form','upload'], function(){
-	var $ = layui.jquery;
-	 $('#IDdownloadClean').hide();
-	 $('#IDdownloadCleaned').hide();
-	$("#IDloading").click(function(){
-		location.href = '/loading';
-	});
-	$("#IDstartClean").click(function () {
-		console.log("开始清洗，post请求");
-		$.post('/clean',{needContent:$('#IDcleanContent').val()},function (res) {
-			console.log(res);
-			$('#IDcleaned').val(res.data);
-		});
-	});
-	$('#IDuploadFile').click(function () {
-		console.log("开始更新，post请求");
-		$.post('/clean/updateFile',{content:$('#IDcleaned').val(),IDid:$('#IDid').val()},function (res) {
-			if(res.code!=250){
-				layer.msg(res.msg,{icon:1,time:2000,shade:0.4});
-				$('#IDdownloadClean').show();
-				$('#IDdownloadCleaned').show();
-				//$('#IDdownloadFile').attr("disabled",false);
-				console.log("设置可点击");
-			}else{
-				layer.msg(res.msg,{icon:2,time:2000,shade:0.4});
-			}
-		});
-	});
-	$('#IDqingkong').click(function () {
-		console.log("清空启用")
-		$('#IDcleanContent').val("");
-	});
-});
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , $=layui.jquery;
+        $('#IdDownloadClean').hide();
+        $('#IdDownloadCleaned').hide();
+        //监听提交
+        layui.$('#IdQinKong').on('click', function () {
+            $('#IdCleanContent').val("");
+        });
+        form.on('submit(startClean)', function (data) {
+            $.ajax({
+                url: '/clean',
+                data: JSON.stringify(data.field),
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                success: function (res) {
+                    console.log(res.msg);
+                    $('#IdCleanResult').val(res.data);
+                }
+            });
+            return false;
+        });
+
+        //更新存储
+        layui.$('#IdUpdateFile').on('click', function () {
+            console.log("劲来了");
+            $.ajax({
+                url: '/clean/updateFile',
+                type: 'get',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code != 250) {
+                        layer.msg(res.msg, {icon: 1, time: 2000, shade: 0.4});
+                        $('#IdDownloadClean').show();
+                        $('#IdDownloadCleaned').show();
+                        //$('#IDdownloadFile').attr("disabled",false);
+                        console.log("设置可点击");
+                    } else {
+                        layer.msg(res.msg, {icon: 2, time: 2000, shade: 0.4});
+                    }
+                }
+            });
+        });
+    });
 </script>
+
 </body>
 </html>

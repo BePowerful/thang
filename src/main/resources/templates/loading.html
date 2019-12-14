@@ -30,9 +30,11 @@
                             <span th:text="|上传时间:${object.getDate()}|">上传时间:2019.10.12</span>
                             <span th:text="|语料来源:${object.getSource()}|">语料来源:维基百科</span>
                         </div>
-                            <a class="daoru" th:href="@{/leaveLoading/(id=${object.getId()},classType=${object.getClassType()},doThis=${doWhat})}">
-                                <i class="layui-icon layui-icon-add-1 " title="导入" style="font-size: 30px;color: chartreuse"></i>
-                            </a>
+                        <a class="daoru"
+                           th:href="@{/leaveLoading/(id=${object.getId()},classType=${object.getClassType()},doThis=${doWhat})}">
+                            <i class="layui-icon layui-icon-add-1 " title="导入"
+                               style="font-size: 30px;color: chartreuse"></i>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -43,7 +45,7 @@
 <div th:insert="footer :: foot"></div>
 <script th:src="@{/layui/layui.js}"></script>
 <script>
-    layui.use(['element','form'], function(){
+    layui.use(['element', 'form'], function () {
         var element = layui.element;
     });
 </script>

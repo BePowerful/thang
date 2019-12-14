@@ -30,6 +30,9 @@ class ThangApplicationTests {
 
     @Test
     void contextLoads() {
+        String src = "  开始+-*/^&><结束\n\b\r\t\\这 才。";
+        System.out.println(src);
+        tes(src);
         //firstDemo();
         //标准分词
 //        biaoZhunFenCi();
@@ -42,7 +45,7 @@ class ThangApplicationTests {
 //        //crf分词
 //        crf();
 //        // N-最短路径分词
-        nzuiduan();
+//        nzuiduan();
 //        //用户自定义词典
 //        yhzdycd();不用
 //        //中国人名识别
@@ -69,9 +72,52 @@ class ThangApplicationTests {
 //        wenbentuijian();
 //        yvyvjilv();
 //        //依存句法分析
-        yicunjufafenxi();
+//        yicunjufafenxi();
     }
 
+    public void tes(String original) {
+        char[] chars = original.toCharArray();
+        String res = "";
+        Boolean math = true;
+        for (char ch : chars) {
+            if(math){
+                switch (ch) {
+                    case ' ':
+                    case '\b':
+                    case '\n':
+                    case '\r':
+                    case '\t':
+                    case '\\':
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                    case '^':
+                    case '<':
+                    case '>':
+                    case '&': break;
+                    default:{
+                        res += String.valueOf(ch);
+                        break;
+                    }
+                }
+            }else{
+                switch (ch){
+                    case ' ':
+                    case '\b':
+                    case '\n':
+                    case '\r':
+                    case '\t':
+                    case '\\':break;
+                    default:{
+                        res += String.valueOf(ch);
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println(res);
+    }
     private void yicunjufafenxi() {
         System.out.println("依存句法分析");
         CoNLLSentence sentence = HanLP.parseDependency("徐先生还具体帮助他确定了把画雄鹰、松鼠和麻雀作为主攻目标。");

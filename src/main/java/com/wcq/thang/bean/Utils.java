@@ -3,6 +3,7 @@ package com.wcq.thang.bean;
 import com.wcq.thang.config.Constant;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * @author wcq
@@ -10,15 +11,52 @@ import java.io.*;
  */
 public class Utils {
     /**
-     * 数据清洗方法
+     * 清洗
      * @param original
+     * @param math 是否清洗数学运输符号
      * @return
      */
-    public static String cleanFunction(String original){
-        //清洗方法
-        //....
-        //返回清洗结果
-        return "这是清洗结果";
+    public static String cleanFunction(String original,String math){
+        char[] chars = original.toCharArray();
+        String res = "";
+        for (char ch : chars) {
+            if(math.equals("on")){
+                switch (ch) {
+                    case ' ':
+                    case '\b':
+                    case '\n':
+                    case '\r':
+                    case '\t':
+                    case '\\':
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                    case '^':
+                    case '<':
+                    case '>':
+                    case '&': break;
+                    default:{
+                        res += String.valueOf(ch);
+                        break;
+                    }
+                }
+            }else{
+                switch (ch){
+                    case ' ':
+                    case '\b':
+                    case '\n':
+                    case '\r':
+                    case '\t':
+                    case '\\':break;
+                    default:{
+                        res += String.valueOf(ch);
+                        break;
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     /**

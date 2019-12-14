@@ -1,5 +1,7 @@
 package com.wcq.thang.service;
 
+import com.wcq.thang.bean.ObjectCache;
+import com.wcq.thang.bean.ParticipleUtil;
 import com.wcq.thang.bean.Result;
 import com.wcq.thang.bean.Utils;
 import com.wcq.thang.config.Constant;
@@ -33,6 +35,8 @@ public class CorpusCleanService {
     private MatureMapper matureMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ObjectCache objectCache;
 
     /**
      * 获取未清洗语料列表
@@ -93,32 +97,37 @@ public class CorpusCleanService {
      * @param content
      * @return
      */
-    public Result cleanOriginalOrOtherInput(String content) {
+    public Result cleanOriginalOrOtherInput(String content,String ftj,String math,Integer doId) {
         Result result = new Result();
         //调用清洗方法，返回清洗结果
-        String cleanResult = Utils.cleanFunction(content);
+        String cleanResult = Utils.cleanFunction(content,math);
         if (cleanResult != null) {//清洗成功，设置语料清洗标志位
+            if(ftj.equals("on")){//需要繁体转简体就转一下
+                cleanResult = ParticipleUtil.ftoJ(cleanResult);
+            }
+            if(doId>0){//导入的语料
+                objectCache.setDoId(doId);
+                objectCache.setData(cleanResult);
+            }
             result.setCode(Constant.DO_SUCCESS);
             result.setMsg("清洗成功!");
             result.setData(cleanResult);
         } else {
             result.setCode(Constant.DO_FAIL);
             result.setMsg("数据清洗失败!");
-            result.setData(cleanResult);
+            result.setData("清洗失败！");
         }
         return result;
     }
 
     /**
      * 清洗后更新语料存储
-     * @param content
-     * @param id
      * @return
      */
-    public Result updateOriginalCaseCleaned(String content, Integer id) {
+    public Result seaveCleanResult() {
         Result result = new Result();
         //通过id找到原始语料文件
-        Original original = originalMapper.selectByPrimaryKey(id);
+        Original original = originalMapper.selectByPrimaryKey(objectCache.getDoId());
 
         //创建存储,统一存储为txt格式
         File filePath = new File(Constant.FILE_URL);
@@ -127,7 +136,7 @@ public class CorpusCleanService {
         String fileName = UUID.randomUUID().toString() + ".txt";
         String cleanedPath = filePath + "\\" + fileName;
         //存储
-        if (Utils.writerTxtFile(cleanedPath,content)) {
+        if (Utils.writerTxtFile(cleanedPath,objectCache.getData().toString())) {
             //设置清洗后的语料存储位置
             original.setCleanedPath(cleanedPath);
             //设置语料已经清洗过了

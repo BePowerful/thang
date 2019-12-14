@@ -28,6 +28,7 @@ public class CorpusParticipleController {
     @GetMapping("/loadingForParticiple")
     public ModelAndView toLoadingParticiple(){
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("doWhat","participle");
         modelAndView.addObject("objects",participleService.getCanParticipleCorpus());
         modelAndView.setViewName("loading");
         return modelAndView;
