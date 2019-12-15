@@ -15,19 +15,19 @@
 <!-- 内容区 -->
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-
         <div class="layui-col-md7">
             <div class="fly-panel"
                  style="padding: 15px 30px 15px;background-color: #f0f8ff;min-height: 610px;margin-bottom: 0">
 
                 <h2 align="center">语料分词</h2>
                 <hr class="layui-bg-cyan">
-                <div class="layui-form layui-form-pane">
+                <form class="layui-form layui-form-pane">
                     <div class="layui-form-item layui-form-text">
                         <label class="layui-form-label">导入语料或输入内容</label>
                         <div class="layui-input-block">
 							<textarea id="IdParticipleContent" th:text="${participleContent}"
-                                      lay-verify="required" class="layui-textarea" placeholder="请输入内容" name="other"
+                                      lay-verify="required" class="layui-textarea" placeholder="请输入内容"
+                                      name="participleContent"
                                       style="height: 200px;"></textarea>
                         </div>
                     </div>
@@ -35,8 +35,11 @@
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <div class="layui-input-inline" style="width: auto;">
-                                <button class="layui-btn layui-btn-normal" id="IdLoad">导入语料</button>
+<!--                                <button class="layui-btn layui-btn-normal" id="IdLoad" type="button">导入语料</button>-->
+                                <a class="layui-btn" th:href="@{/loadingForParticiple}">导入语料</a>
                             </div>
+                            <input id="IdDoId" name="doId" type="hidden" th:value="${doID}">
+                            <input id="IdClassType" name="classType" type="hidden" th:value="${classType}">
                             <div class="layui-input-inline">
                                 <select name="participleFunction" lay-verify="required" id="IdSelectFunc">
                                     <option value="">请选择分词方法</option>
@@ -50,26 +53,27 @@
                                 </select>
                             </div>
                             <div class="layui-input-inline" style="width: auto;">
-                                <button class="layui-btn " id="IdSure">确定</button>
+                                <button class="layui-btn " id="IdSure" type="submit" lay-submit="" lay-filter="okGo">确定</button>
                             </div>
                             <div class="layui-input-inline" style="width: auto;">
-                                <button class="layui-btn " id="IdReset">重置内容</button>
+                                <button class="layui-btn " id="IdReset" type="button">重置内容</button>
                             </div>
                         </div>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block" style="margin-left: 5px;">
-                            <input name="like[1]" title="结巴分词" type="checkbox">
-                            <input name="like[2]" title="标准分词" type="checkbox" checked="">
-                            <input name="like[3]" title="NLP分词" type="checkbox">
-                            <input name="like[4]" title="索引分词" type="checkbox">
-                            <input name="like[5]" title="crf分词" type="checkbox">
-                            <input name="like[6]" title="N最短路径分词" type="checkbox">
-                            <input name="like[7]" title="N依存句法分析" type="checkbox">
-                            <button class="layui-btn">确定</button>
-                        </div>
-                    </div>
-
+<!--                    <div class="layui-form-item">-->
+<!--                        <div class="layui-input-block" style="margin-left: 5px;">-->
+<!--                            <input name="like[1]" title="结巴分词" type="checkbox">-->
+<!--                            <input name="like[2]" title="标准分词" type="checkbox" checked="">-->
+<!--                            <input name="like[3]" title="NLP分词" type="checkbox">-->
+<!--                            <input name="like[4]" title="索引分词" type="checkbox">-->
+<!--                            <input name="like[5]" title="crf分词" type="checkbox">-->
+<!--                            <input name="like[6]" title="N最短路径分词" type="checkbox">-->
+<!--                            <input name="like[7]" title="N依存句法分析" type="checkbox">-->
+<!--                            <button class="layui-btn" type="submit">确定</button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </form>
+                <form class="layui-form layui-form-pane">
                     <div class="layui-form-item layui-form-text">
                         <label class="layui-form-label">处理结果</label>
                         <div class="layui-input-block">
@@ -78,8 +82,12 @@
                         </div>
                     </div>
 
-
-                </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-normal" id="IdSaveParticipleResult"
+                                type="button">将分词结果存入语料库
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -149,21 +157,47 @@
 <script th:src="@{/layui/layui.js}"></script>
 <script>
     layui.use(['form', 'element'], function () {
-        var $ = layui.jquery;
-        //导入语料
-        $('#IdLoad').click(function () {
-            location.href = '/loadingForParticiple';
-        });
-        $('#IdSure').click(function () {
-            $.post('/participle', {
-                content: $('#IdParticipleContent').val(),
-                funcSelect: $('#IdSelectFunc').val()
-            }, function (res) {
-                $('#IdParticipleResult').val(res.data);
-            });
-        });
-        $('#IdReset').click(function () {
+        var form = layui.form,
+            $ = layui.jquery;
+        //清空
+        layui.$('#IdReset').on('click', function () {
             $('#IdParticipleContent').val("");
+        });
+        //导入语料
+        // $('#IdLoad').click(function () {
+        //     location.href = '/loadingForParticiple';
+        // });
+        //监听提交
+        form.on('submit(okGo)', function (data) {
+            $.ajax({
+                url: '/participle',
+                data: JSON.stringify(data.field),
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                success: function (res) {
+                    console.log(res.msg);
+                    $('#IdParticipleResult').val(res.data);
+                }
+            });
+            return false;
+        });
+
+        //保存分词结果
+        layui.$('#IdSaveParticipleResult').on('click', function () {
+            console.log("进来了");
+            $.ajax({
+                url: '/participle/saveResult',
+                type: 'get',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code != 250) {
+                        layer.msg(res.msg, {icon: 1, time: 2000, shade: 0.4});
+                    } else {
+                        layer.msg(res.msg, {icon: 2, time: 2000, shade: 0.4});
+                    }
+                }
+            });
         });
     });
 </script>

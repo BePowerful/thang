@@ -30,11 +30,11 @@
         </javaClientGenerator>
 
         <!--<table tableName="users" domainObjectName="User" ></table>-->
-
-        <table tableName="original" domainObjectName="Original" ></table>
-        <table tableName="mature" domainObjectName="Mature" >
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
-        </table>
+        <table tableName="tcorpus" domainObjectName="Tcorpus" ></table>
+<!--        <table tableName="original" domainObjectName="Original" ></table>-->
+<!--        <table tableName="mature" domainObjectName="Mature" >-->
+<!--            &lt;!&ndash;<generatedKey column="id" sqlStatement="Mysql" identity="true"/>&ndash;&gt;-->
+<!--        </table>-->
     </context>
     <!--mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate-->
 </generatorConfiguration>

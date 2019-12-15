@@ -49,6 +49,7 @@ public class CommonController {
             content = participleService.getParticipleContent(id, classType);
             modelAndView.addObject("participleContent", content);
             modelAndView.addObject("doID", id);
+            modelAndView.addObject("classType", classType);
             modelAndView.setViewName("participle");
         }
         return modelAndView;

@@ -12,4 +12,5 @@ import org.springframework.stereotype.Component;
 public class ObjectCache {
     private Object data;
     private Integer doId;
+    private String tag;
 }

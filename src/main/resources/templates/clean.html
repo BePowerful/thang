@@ -77,10 +77,11 @@
             , $=layui.jquery;
         $('#IdDownloadClean').hide();
         $('#IdDownloadCleaned').hide();
-        //监听提交
+
         layui.$('#IdQinKong').on('click', function () {
             $('#IdCleanContent').val("");
         });
+        //监听提交
         form.on('submit(startClean)', function (data) {
             $.ajax({
                 url: '/clean',
@@ -98,7 +99,7 @@
 
         //更新存储
         layui.$('#IdUpdateFile').on('click', function () {
-            console.log("劲来了");
+            console.log("进来了");
             $.ajax({
                 url: '/clean/updateFile',
                 type: 'get',

@@ -94,7 +94,10 @@ public class CorpusCleanService {
 
     /**
      * 语料清洗接口
-     * @param content
+     * @param content 语料内容
+     * @param ftj 是否繁体转简体
+     * @param math 是否剔除数字运算符
+     * @param doId 当前清洗的语料的id
      * @return
      */
     public Result cleanOriginalOrOtherInput(String content,String ftj,String math,Integer doId) {
@@ -106,8 +109,10 @@ public class CorpusCleanService {
                 cleanResult = ParticipleUtil.ftoJ(cleanResult);
             }
             if(doId>0){//导入的语料
+                //写入缓存
                 objectCache.setDoId(doId);
                 objectCache.setData(cleanResult);
+                objectCache.setTag("clean");
             }
             result.setCode(Constant.DO_SUCCESS);
             result.setMsg("清洗成功!");

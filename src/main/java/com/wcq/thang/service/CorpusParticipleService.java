@@ -1,5 +1,6 @@
 package com.wcq.thang.service;
 
+import com.wcq.thang.bean.ObjectCache;
 import com.wcq.thang.bean.ParticipleUtil;
 import com.wcq.thang.bean.Result;
 import com.wcq.thang.bean.Utils;
@@ -7,6 +8,7 @@ import com.wcq.thang.config.Constant;
 import com.wcq.thang.dto.ShowRetrievalResultDTO;
 import com.wcq.thang.mapper.MatureMapper;
 import com.wcq.thang.mapper.OriginalMapper;
+import com.wcq.thang.mapper.TcorpusMapper;
 import com.wcq.thang.mapper.UserMapper;
 import com.wcq.thang.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,10 @@ public class CorpusParticipleService {
     private OriginalMapper originalMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private TcorpusMapper tcorpusMapper;
+    @Autowired
+    private ObjectCache objectCache;
 
     /**
      * 获取可分词的语料列表
@@ -111,26 +117,48 @@ public class CorpusParticipleService {
 
     /**
      * 分词入口
-     * @param content
-     * @param funcSelect
+     * @param content 分词内容
+     * @param funcSelect 分词方法
+     * @param doId 分词对应的预料id
+     * @param classType id来自m还是o
      * @return
      */
-    public Result participleMain(String content, Integer funcSelect) {
+    public Result participleMain(String content, Integer funcSelect,Integer doId,String classType) {
         Result result = new Result();
         ParticipleUtil participleUtil = new ParticipleUtil();
         System.out.println("*************"+funcSelect);
+        String participleResult = "";
         switch (funcSelect){
-            case 1:result.setData(participleUtil.jieBa(content));break;
-            case 2:result.setData(participleUtil.standard(content));break;
-            case 3:result.setData(participleUtil.NLP(content));break;
-            case 4:result.setData(participleUtil.indexPar(content));break;
-            case 5:result.setData(participleUtil.crf(content));break;
-            case 6:result.setData(participleUtil.NShort(content));break;
-            case 7:result.setData(participleUtil.analysis(content));break;
+            case 1:participleResult=participleUtil.jieBa(content);break;
+            case 2:participleResult=participleUtil.standard(content);break;
+            case 3:participleResult=participleUtil.NLP(content);break;
+            case 4:participleResult=participleUtil.indexPar(content);break;
+            case 5:participleResult=participleUtil.crf(content);break;
+            case 6:participleResult=participleUtil.NShort(content);break;
+            case 7:participleResult=participleUtil.analysis(content);break;
             default:System.out.println("选择分词方法时出错！");break;
+        }
+        if(doId>0){
+            //导入分词
+            objectCache.setData(participleResult);
+            objectCache.setDoId(doId);
+            objectCache.setTag(classType);
+        }else{
+            //输入分词
+            objectCache.setData(participleResult);
+            objectCache.setDoId(-1);
         }
         result.setMsg("分词成功!");
         result.setCode(Constant.DO_SUCCESS);
+        result.setData(participleResult);
         return result;
+    }
+
+    public Result saveParticipleRes() {
+        Result result = new Result();
+        Tcorpus tcorpus = new Tcorpus();
+        if(objectCache.getDoId()>0){
+        }
+        return null;
     }
 }
